@@ -43,10 +43,28 @@ defmodule RocketChat.User do
       id -> %{"userId" => id}
     end
     |> API.post("v1/users.createToken")
-    |> case do
-      {:ok, response} -> {:ok, Jason.decode!(response.body)}
-      other -> other
-    end
+    |> decode_success()
   end
+
+  @doc """
+  Log the user in to RocketChat.  First arg is username or email, then use
+  Keyword list to indicate :password or :resume (which uses a token)
+
+  API Ref: https://developer.rocket.chat/api/rest-api/methods/authentication/login
+  """
+  def login(username, opts \\ []) do
+    case Keyword.get(opts, :resume) do
+      nil -> %{"user" => username, "password" => Keyword.get(opts, :password)}
+      token -> %{"user" => username, "resume" => token}
+    end
+    |> API.post("v1/login")
+    |> decode_success()
+  end
+
+  defp decode_success({:ok, response}) do
+    {:ok, Jason.decode!(response.body)}
+  end
+  defp decode_success(not_success), do: not_success
+
 
 end
