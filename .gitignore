@@ -27,5 +27,5 @@ rockex_chat-*.tar
 /tmp
 
 # vi temp files
-*.swap
+*.swp
 
