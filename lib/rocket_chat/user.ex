@@ -1,7 +1,17 @@
 defmodule RocketChat.User do
-  defstruct [:email, :name, :password, :username, :active,
-             :join_default_channels, :require_password_change,
-             :send_welcome_email, :verified, roles: [], custom_fields: %{}]
+  defstruct [
+    :email,
+    :name,
+    :password,
+    :username,
+    :active,
+    :join_default_channels,
+    :require_password_change,
+    :send_welcome_email,
+    :verified,
+    roles: [],
+    custom_fields: %{}
+  ]
 
   import RocketChat.Utils
   alias RocketChat.API
@@ -14,13 +24,13 @@ defmodule RocketChat.User do
 
   API Ref:  https://developer.rocket.chat/api/rest-api/methods/users/create
   """
-  def create(%__MODULE__{}=user) do
+  def create(%__MODULE__{} = user) do
     user
     |> Map.from_struct()
     |> Enum.reject(fn
+      {_k, v} when is_nil(v) -> true
       {_k, v} when is_list(v) or is_map(v) -> Enum.empty?(v)
       {_k, v} when is_binary(v) -> String.trim(v) == ""
-      {_k, v} -> is_nil(v)
       {_, _} -> false
     end)
     |> Enum.into(%{}, fn {k, v} ->
@@ -64,7 +74,6 @@ defmodule RocketChat.User do
   defp decode_success({:ok, response}) do
     {:ok, Jason.decode!(response.body)}
   end
+
   defp decode_success(not_success), do: not_success
-
-
 end

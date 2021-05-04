@@ -1,12 +1,11 @@
 defmodule RocketChat.API do
-
   alias RocketChat.Config
 
   def complete_url(path) do
     "#{String.trim_trailing(Config.api_url(), "/")}/#{String.trim_leading(path, "/")}"
   end
 
-  def post(%{}=payload, path) do
+  def post(%{} = payload, path) do
     payload
     |> Jason.encode!()
     |> post(path)
@@ -18,9 +17,10 @@ defmodule RocketChat.API do
   end
 
   def get_headers() do
-    [{"X-Auth-Token", Config.token()},
-     {"X-User-Id", Config.user_id()},
-     {"Content-type", "application/json"}]
+    [
+      {"X-Auth-Token", Config.token()},
+      {"X-User-Id", Config.user_id()},
+      {"Content-type", "application/json"}
+    ]
   end
-
 end

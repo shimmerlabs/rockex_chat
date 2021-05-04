@@ -1,5 +1,4 @@
 defmodule RocketChat.Config do
-
   def api_url() do
     Application.get_env(:rockex_chat, :api, [])
     |> Keyword.get(:api_url)
@@ -14,5 +13,4 @@ defmodule RocketChat.Config do
     Application.get_env(:rockex_chat, :api, [])
     |> Keyword.get(:token)
   end
-
 end

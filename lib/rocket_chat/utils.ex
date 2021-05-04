@@ -1,5 +1,4 @@
 defmodule RocketChat.Utils do
-
   @doc """
   Converts the string/atom into a camelCased string.
 
@@ -7,10 +6,10 @@ defmodule RocketChat.Utils do
     "fooBar"
   """
   def camelcase(str) when is_binary(str) do
-    [ first | rest ] = String.split(str, ~r/_+/, parts: 2)
+    [first | rest] = String.split(str, ~r/_+/, parts: 2)
     String.downcase(first) <> pascalcase(Enum.at(rest, 0))
   end
-  
+
   def camelcase(atom) when is_atom(atom), do: camelcase(to_string(atom))
   def camelcase(nil), do: ""
 
@@ -28,5 +27,4 @@ defmodule RocketChat.Utils do
 
   def pascalcase(atom) when is_atom(atom), do: pascalcase(to_string(atom))
   def pascalcase(nil), do: ""
-
 end
