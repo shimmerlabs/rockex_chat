@@ -70,10 +70,4 @@ defmodule RocketChat.User do
     |> API.post("v1/login")
     |> decode_success()
   end
-
-  defp decode_success({:ok, response}) do
-    {:ok, Jason.decode!(response.body)}
-  end
-
-  defp decode_success(not_success), do: not_success
 end

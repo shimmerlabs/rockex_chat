@@ -16,6 +16,14 @@ defmodule RocketChat.API do
     |> HTTPoison.post(payload, get_headers())
   end
 
+  def get(%{} = payload \\ %{}, path) do
+    complete_url(path)
+    |> URI.parse()
+    |> Map.put(:query, URI.encode_query(payload))
+    |> URI.to_string()
+    |> HTTPoison.get(get_headers())
+  end
+
   def get_headers() do
     [
       {"X-Auth-Token", Config.token()},
