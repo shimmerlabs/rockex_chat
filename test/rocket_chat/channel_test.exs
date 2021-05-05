@@ -21,7 +21,6 @@ defmodule RocketChat.ChannelTest do
       {:ok, %{body: body}}
     end)
 
-    # assert {:ok, _} = RocketChat.Channel.create("test")
-    RocketChat.Channel.create("test")
+    assert {:ok, _} = RocketChat.Channel.create("test")
   end
 end
