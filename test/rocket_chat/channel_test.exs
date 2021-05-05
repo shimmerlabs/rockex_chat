@@ -14,7 +14,7 @@ defmodule RocketChat.ChannelTest do
   end
 
   test "create" do
-    expect(APIMock, :post, fn params, path ->
+    expect(RocketMock.API, :post, fn params, path ->
       assert params == %{"name" => "test", "members" => [], "readOnly" => false}
       assert path == "v1/channels.create"
       {:ok, %{body: Jason.encode!(%{"data" => %{"channel" => "_id"}})}}

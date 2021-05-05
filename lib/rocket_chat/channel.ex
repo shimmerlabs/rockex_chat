@@ -11,8 +11,6 @@ defmodule RocketChat.Channel do
   @callback create(String.t()) :: tuple()
   @callback create(String.t(), keyword()) :: tuple()
   def create(name, opts \\ []) do
-    IO.inspect(@adapter)
-
     %{
       "name" => name,
       "members" => Keyword.get(opts, :members, []),
