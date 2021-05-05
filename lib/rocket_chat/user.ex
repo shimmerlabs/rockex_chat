@@ -13,7 +13,7 @@ defmodule RocketChat.User do
     custom_fields: %{}
   ]
 
-  import RocketChat.Utils
+  use RocketChat.Utils
   alias RocketChat.API
 
   @doc """

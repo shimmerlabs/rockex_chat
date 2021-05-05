@@ -1,4 +1,17 @@
 defmodule RocketChat.Utils do
+  @moduledoc """
+  Buncha stuff to help with all the other stuff.
+  """
+
+  defmacro __using__(_opts \\ []) do
+    quote do
+      import RocketChat.Utils
+
+      @adapter Application.get_env(:rockex_chat, :api, [])
+               |> Keyword.get(:adapter, RocketChat.API)
+    end
+  end
+
   @doc """
   Converts the string/atom into a camelCased string.
 

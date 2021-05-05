@@ -1,6 +1,5 @@
 defmodule RocketChat.Channel do
-  import RocketChat.Utils
-  alias RocketChat.API
+  use RocketChat.Utils
 
   @doc """
   Create a channel with the given name.  Options:
@@ -12,12 +11,14 @@ defmodule RocketChat.Channel do
   @callback create(String.t()) :: tuple()
   @callback create(String.t(), keyword()) :: tuple()
   def create(name, opts \\ []) do
+    IO.inspect(@adapter)
+
     %{
       "name" => name,
       "members" => Keyword.get(opts, :members, []),
       "readOnly" => Keyword.get(opts, :read_only, false)
     }
-    |> API.post("v1/channels.create")
+    |> @adapter.post("v1/channels.create")
     |> decode_success()
   end
 
@@ -29,7 +30,7 @@ defmodule RocketChat.Channel do
   @callback delete(keyword(id: String.t()) | keyword(name: String.t())) :: tuple()
   def delete(name_or_id) when is_list(name_or_id) do
     room_id_or_name(name_or_id)
-    |> API.post("v1/channels.delete")
+    |> @adapter.post("v1/channels.delete")
     |> decode_success()
   end
 
@@ -43,7 +44,7 @@ defmodule RocketChat.Channel do
   def list(query_opts \\ []) do
     query_opts
     |> query_opts_to_fields()
-    |> API.get("v1/channels.list")
+    |> @adapter.get("v1/channels.list")
     |> decode_success()
   end
 
@@ -55,7 +56,7 @@ defmodule RocketChat.Channel do
   @callback info(keyword(id: String.t()) | keyword(name: String.t())) :: tuple()
   def info(opts \\ []) do
     room_id_or_name(opts)
-    |> API.get("v1/channels.info")
+    |> @adapter.get("v1/channels.info")
     |> decode_success()
   end
 
@@ -67,7 +68,7 @@ defmodule RocketChat.Channel do
   @callback set_announcement(String.t(), String.t()) :: tuple()
   def set_announcement(room_id, announcement) do
     %{"roomId" => room_id, "announcement" => announcement}
-    |> API.post("v1/channels.setAnnouncement")
+    |> @adapter.post("v1/channels.setAnnouncement")
     |> decode_success()
   end
 
@@ -79,7 +80,7 @@ defmodule RocketChat.Channel do
   @callback set_description(String.t(), String.t()) :: tuple()
   def set_description(room_id, description) do
     %{"roomId" => room_id, "description" => description}
-    |> API.post("v1/channels.setDescription")
+    |> @adapter.post("v1/channels.setDescription")
     |> decode_success()
   end
 
@@ -91,7 +92,7 @@ defmodule RocketChat.Channel do
   @callback set_topic(String.t(), String.t()) :: tuple()
   def set_topic(room_id, topic) do
     %{"roomId" => room_id, "topic" => topic}
-    |> API.post("v1/channels.setTopic")
+    |> @adapter.post("v1/channels.setTopic")
     |> decode_success()
   end
 
@@ -106,7 +107,7 @@ defmodule RocketChat.Channel do
   @callback set_channel_type(String.t(), String.t() | :private | :public) :: tuple()
   def set_channel_type(room_id, type) when type in ["p", "c"] do
     %{"roomId" => room_id, "type" => type}
-    |> API.post("v1/channels.setType")
+    |> @adapter.post("v1/channels.setType")
     |> decode_success()
   end
 
@@ -121,7 +122,7 @@ defmodule RocketChat.Channel do
   @callback set_readonly(String.t(), boolean()) :: tuple()
   def set_readonly(room_id, onoff) when is_boolean(onoff) do
     %{"roomId" => room_id, "readOnly" => onoff}
-    |> API.post("v1/channels.setReadOnly")
+    |> @adapter.post("v1/channels.setReadOnly")
     |> decode_success()
   end
 
@@ -133,7 +134,7 @@ defmodule RocketChat.Channel do
   @callback invite_user(String.t(), String.t()) :: tuple()
   def invite_user(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
-    |> API.post("v1/channels.invite")
+    |> @adapter.post("v1/channels.invite")
     |> decode_success()
   end
 
@@ -145,7 +146,7 @@ defmodule RocketChat.Channel do
   @callback kick_user(String.t(), String.t()) :: tuple()
   def kick_user(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
-    |> API.post("v1/channels.kick")
+    |> @adapter.post("v1/channels.kick")
     |> decode_success()
   end
 

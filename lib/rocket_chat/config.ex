@@ -1,6 +1,6 @@
 defmodule RocketChat.Config do
   def api_url() do
-    Application.get_env(:rockex_chat, :api, [])
+    Application.get_env(:rockex_chat, :api, api_url: "http://localhost:3000")
     |> Keyword.get(:api_url)
   end
 
