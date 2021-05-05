@@ -9,6 +9,8 @@ defmodule RocketChat.Channel do
 
   API Ref:  https://developer.rocket.chat/api/rest-api/methods/channels/create
   """
+  @callback create(String.t()) :: tuple()
+  @callback create(String.t(), keyword()) :: tuple()
   def create(name, opts \\ []) do
     %{
       "name" => name,
@@ -24,6 +26,7 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/delete
   """
+  @callback delete(keyword(id: String.t()) | keyword(name: String.t())) :: tuple()
   def delete(name_or_id) when is_list(name_or_id) do
     room_id_or_name(name_or_id)
     |> API.post("v1/channels.delete")
@@ -35,6 +38,8 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/list
   """
+  @callback list() :: tuple()
+  @callback list(keyword()) :: tuple()
   def list(query_opts \\ []) do
     query_opts
     |> query_opts_to_fields()
@@ -47,6 +52,7 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/info
   """
+  @callback info(keyword(id: String.t()) | keyword(name: String.t())) :: tuple()
   def info(opts \\ []) do
     room_id_or_name(opts)
     |> API.get("v1/channels.info")
@@ -58,6 +64,7 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/setannouncement
   """
+  @callback set_announcement(String.t(), String.t()) :: tuple()
   def set_announcement(room_id, announcement) do
     %{"roomId" => room_id, "announcement" => announcement}
     |> API.post("v1/channels.setAnnouncement")
@@ -69,6 +76,7 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/setdescription
   """
+  @callback set_description(String.t(), String.t()) :: tuple()
   def set_description(room_id, description) do
     %{"roomId" => room_id, "description" => description}
     |> API.post("v1/channels.setDescription")
@@ -80,6 +88,7 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/settopic
   """
+  @callback set_topic(String.t(), String.t()) :: tuple()
   def set_topic(room_id, topic) do
     %{"roomId" => room_id, "topic" => topic}
     |> API.post("v1/channels.setTopic")
@@ -94,6 +103,7 @@ defmodule RocketChat.Channel do
   NOTE:  The API permits either room ID or room name -- standardizing on ID
          here for simplicity.
   """
+  @callback set_channel_type(String.t(), String.t() | :private | :public) :: tuple()
   def set_channel_type(room_id, type) when type in ["p", "c"] do
     %{"roomId" => room_id, "type" => type}
     |> API.post("v1/channels.setType")
@@ -108,6 +118,7 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/setreadonly
   """
+  @callback set_readonly(String.t(), boolean()) :: tuple()
   def set_readonly(room_id, onoff) when is_boolean(onoff) do
     %{"roomId" => room_id, "readOnly" => onoff}
     |> API.post("v1/channels.setReadOnly")
@@ -119,6 +130,7 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/invite
   """
+  @callback invite_user(String.t(), String.t()) :: tuple()
   def invite_user(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
     |> API.post("v1/channels.invite")
@@ -130,6 +142,7 @@ defmodule RocketChat.Channel do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/kick
   """
+  @callback kick_user(String.t(), String.t()) :: tuple()
   def kick_user(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
     |> API.post("v1/channels.kick")

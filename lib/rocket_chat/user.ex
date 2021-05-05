@@ -24,6 +24,7 @@ defmodule RocketChat.User do
 
   API Ref:  https://developer.rocket.chat/api/rest-api/methods/users/create
   """
+  @callback create(%__MODULE__{}) :: tuple()
   def create(%__MODULE__{} = user) do
     user
     |> Map.from_struct()
@@ -47,6 +48,7 @@ defmodule RocketChat.User do
 
   API Ref:  https://developer.rocket.chat/api/rest-api/methods/users/createtoken
   """
+  @callback create_token(keyword(user_id: String.t()) | keyword(username: String.t())) :: tuple()
   def create_token(opts \\ []) do
     case Keyword.get(opts, :user_id) do
       nil -> %{"username" => Keyword.get(opts, :username)}
@@ -62,6 +64,8 @@ defmodule RocketChat.User do
 
   API Ref: https://developer.rocket.chat/api/rest-api/methods/authentication/login
   """
+  @callback login(String.t()) :: tuple()
+  @callback login(String.t(), keyword()) :: tuple()
   def login(username, opts \\ []) do
     case Keyword.get(opts, :resume) do
       nil -> %{"user" => username, "password" => Keyword.get(opts, :password)}
