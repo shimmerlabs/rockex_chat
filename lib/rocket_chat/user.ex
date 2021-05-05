@@ -14,7 +14,6 @@ defmodule RocketChat.User do
   ]
 
   use RocketChat.Utils
-  alias RocketChat.API
 
   @doc """
   Calls the create user endpoint with the User module struct given.
@@ -37,7 +36,7 @@ defmodule RocketChat.User do
     |> Enum.into(%{}, fn {k, v} ->
       {camelcase(k), v}
     end)
-    |> API.post("v1/users.create")
+    |> adapter().post("v1/users.create")
   end
 
   @doc """
@@ -54,7 +53,7 @@ defmodule RocketChat.User do
       nil -> %{"username" => Keyword.get(opts, :username)}
       id -> %{"userId" => id}
     end
-    |> API.post("v1/users.createToken")
+    |> adapter().post("v1/users.createToken")
     |> decode_success()
   end
 
@@ -71,7 +70,7 @@ defmodule RocketChat.User do
       nil -> %{"user" => username, "password" => Keyword.get(opts, :password)}
       token -> %{"user" => username, "resume" => token}
     end
-    |> API.post("v1/login")
+    |> adapter().post("v1/login")
     |> decode_success()
   end
 end

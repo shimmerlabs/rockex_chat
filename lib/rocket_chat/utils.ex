@@ -6,9 +6,7 @@ defmodule RocketChat.Utils do
   defmacro __using__(_opts \\ []) do
     quote do
       import RocketChat.Utils
-
-      @adapter Application.get_env(:rockex_chat, :api, [])
-               |> Keyword.get(:adapter, RocketChat.API)
+      import RocketChat.Config, only: [adapter: 0]
     end
   end
 
@@ -47,6 +45,9 @@ defmodule RocketChat.Utils do
   """
   def decode_success({:ok, response}) do
     {:ok, Jason.decode!(response.body)}
+  rescue
+    Jason.DecodeError ->
+      {:error, "JSON Decode Error, got: #{String.slice(response.body, 0, 20)}..."}
   end
 
   def decode_success(not_success), do: not_success
