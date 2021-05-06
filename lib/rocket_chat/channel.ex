@@ -17,7 +17,6 @@ defmodule RocketChat.Channel do
       "readOnly" => Keyword.get(opts, :read_only, false)
     }
     |> adapter().post("v1/channels.create")
-    |> decode_success()
   end
 
   @doc """
@@ -29,7 +28,6 @@ defmodule RocketChat.Channel do
   def delete(name_or_id) when is_list(name_or_id) do
     room_id_or_name(name_or_id)
     |> adapter().post("v1/channels.delete")
-    |> decode_success()
   end
 
   @doc """
@@ -43,7 +41,6 @@ defmodule RocketChat.Channel do
     query_opts
     |> query_opts_to_fields()
     |> adapter().get("v1/channels.list")
-    |> decode_success()
   end
 
   @doc """
@@ -55,7 +52,6 @@ defmodule RocketChat.Channel do
   def info(opts \\ []) do
     room_id_or_name(opts)
     |> adapter().get("v1/channels.info")
-    |> decode_success()
   end
 
   @doc """
@@ -67,7 +63,6 @@ defmodule RocketChat.Channel do
   def set_announcement(room_id, announcement) do
     %{"roomId" => room_id, "announcement" => announcement}
     |> adapter().post("v1/channels.setAnnouncement")
-    |> decode_success()
   end
 
   @doc """
@@ -79,7 +74,6 @@ defmodule RocketChat.Channel do
   def set_description(room_id, description) do
     %{"roomId" => room_id, "description" => description}
     |> adapter().post("v1/channels.setDescription")
-    |> decode_success()
   end
 
   @doc """
@@ -91,7 +85,6 @@ defmodule RocketChat.Channel do
   def set_topic(room_id, topic) do
     %{"roomId" => room_id, "topic" => topic}
     |> adapter().post("v1/channels.setTopic")
-    |> decode_success()
   end
 
   @doc """
@@ -106,7 +99,6 @@ defmodule RocketChat.Channel do
   def set_channel_type(room_id, type) when type in ["p", "c"] do
     %{"roomId" => room_id, "type" => type}
     |> adapter().post("v1/channels.setType")
-    |> decode_success()
   end
 
   def set_channel_type(room_id, :private), do: set_channel_type(room_id, "p")
@@ -121,7 +113,6 @@ defmodule RocketChat.Channel do
   def set_readonly(room_id, onoff) when is_boolean(onoff) do
     %{"roomId" => room_id, "readOnly" => onoff}
     |> adapter().post("v1/channels.setReadOnly")
-    |> decode_success()
   end
 
   @doc """
@@ -133,7 +124,6 @@ defmodule RocketChat.Channel do
   def invite_user(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
     |> adapter().post("v1/channels.invite")
-    |> decode_success()
   end
 
   @doc """
@@ -145,7 +135,6 @@ defmodule RocketChat.Channel do
   def kick_user(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
     |> adapter().post("v1/channels.kick")
-    |> decode_success()
   end
 
   @doc """
@@ -157,7 +146,6 @@ defmodule RocketChat.Channel do
   def leave(room_id) do
     %{"roomId" => room_id}
     |> adapter().post("v1/channels.leave")
-    |> decode_success()
   end
 
   @doc """
@@ -169,7 +157,6 @@ defmodule RocketChat.Channel do
   def set_moderator(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
     |> adapter().post("v1/channels.addModerator")
-    |> decode_success()
   end
 
   @doc """
@@ -181,7 +168,6 @@ defmodule RocketChat.Channel do
   def set_owner(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
     |> adapter().post("v1/channels.addOwner")
-    |> decode_success()
   end
 
   @doc """
@@ -194,7 +180,6 @@ defmodule RocketChat.Channel do
     id_or_name
     |> room_id_or_name()
     |> adapter().get("v1/channels.members")
-    |> decode_success()
   end
 
   defp room_id_or_name(opts) do

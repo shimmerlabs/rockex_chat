@@ -52,7 +52,6 @@ defmodule RocketChat.User do
     id_or_name
     |> user_id_or_name()
     |> adapter().post("v1/users.createToken")
-    |> decode_success()
   end
 
   @doc """
@@ -69,7 +68,6 @@ defmodule RocketChat.User do
       token -> %{"user" => username, "resume" => token}
     end
     |> adapter().post("v1/login")
-    |> decode_success()
   end
 
   @doc """
@@ -82,7 +80,6 @@ defmodule RocketChat.User do
     id_or_name
     |> user_id_or_name()
     |> adapter().get("v1/users.info")
-    |> decode_success()
   end
 
   defp user_id_or_name(opts) do
