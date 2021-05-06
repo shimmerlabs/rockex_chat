@@ -11,8 +11,6 @@ defmodule RocketChat.Channel do
   @callback create(String.t()) :: tuple()
   @callback create(String.t(), keyword()) :: tuple()
   def create(name, opts \\ []) do
-    IO.inspect(adapter())
-
     %{
       "name" => name,
       "members" => Keyword.get(opts, :members, []),
@@ -147,6 +145,55 @@ defmodule RocketChat.Channel do
   def kick_user(room_id, user_id) do
     %{"roomId" => room_id, "userId" => user_id}
     |> adapter().post("v1/channels.kick")
+    |> decode_success()
+  end
+
+  @doc """
+  Cause the callee (account configured) to leave the given channel by ID.
+
+  API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/leave
+  """
+  @callback leave(String.t()) :: tuple()
+  def leave(room_id) do
+    %{"roomId" => room_id}
+    |> adapter().post("v1/channels.leave")
+    |> decode_success()
+  end
+
+  @doc """
+  Set user (by ID) as moderator of room (by ID)
+
+  API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/addmoderator
+  """
+  @callback set_moderator(String.t(), String.t()) :: tuple()
+  def set_moderator(room_id, user_id) do
+    %{"roomId" => room_id, "userId" => user_id}
+    |> adapter().post("v1/channels.addModerator")
+    |> decode_success()
+  end
+
+  @doc """
+  Set user (by ID) as owner of room (by ID)
+
+  API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/addowner
+  """
+  @callback set_owner(String.t(), String.t()) :: tuple()
+  def set_owner(room_id, user_id) do
+    %{"roomId" => room_id, "userId" => user_id}
+    |> adapter().post("v1/channels.addOwner")
+    |> decode_success()
+  end
+
+  @doc """
+  List members of channel (by name or id)
+
+  API Ref: https://developer.rocket.chat/api/rest-api/methods/channels/list
+  """
+  @callback members(keyword(id: String.t()) | keyword(name: String.t())) :: tuple()
+  def members(id_or_name) when is_list(id_or_name) do
+    id_or_name
+    |> room_id_or_name()
+    |> adapter().get("v1/channels.members")
     |> decode_success()
   end
 

@@ -48,11 +48,9 @@ defmodule RocketChat.User do
   API Ref:  https://developer.rocket.chat/api/rest-api/methods/users/createtoken
   """
   @callback create_token(keyword(user_id: String.t()) | keyword(username: String.t())) :: tuple()
-  def create_token(opts \\ []) do
-    case Keyword.get(opts, :user_id) do
-      nil -> %{"username" => Keyword.get(opts, :username)}
-      id -> %{"userId" => id}
-    end
+  def create_token(id_or_name) when is_list(id_or_name) do
+    id_or_name
+    |> user_id_or_name()
     |> adapter().post("v1/users.createToken")
     |> decode_success()
   end
@@ -72,5 +70,25 @@ defmodule RocketChat.User do
     end
     |> adapter().post("v1/login")
     |> decode_success()
+  end
+
+  @doc """
+  Retrieve user record data by username or user_id.
+
+  API Ref: https://developer.rocket.chat/api/rest-api/methods/users/info
+  """
+  @callback info(keyword(user_id: String.t()) | keyword(username: String.t())) :: tuple()
+  def info(id_or_name) when is_list(id_or_name) do
+    id_or_name
+    |> user_id_or_name()
+    |> adapter().get("v1/users.info")
+    |> decode_success()
+  end
+
+  defp user_id_or_name(opts) do
+    case Keyword.get(opts, :user_id) do
+      nil -> %{"username" => Keyword.get(opts, :username)}
+      id -> %{"userId" => id}
+    end
   end
 end
